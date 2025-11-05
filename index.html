@@ -868,6 +868,35 @@
             margin-top: 16px;
         }
 
+        .bookmark-copy-btn {
+            background: none;
+            border: none;
+            color: var(--on-surface-variant);
+            padding: 6px;
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed) var(--transition-ease);
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .bookmark-copy-btn:hover {
+            background-color: var(--surface-container-hover);
+            color: var(--on-surface);
+        }
+
+        .bookmark-copy-btn .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .bookmark-copy-btn.copied {
+            color: var(--primary);
+            background-color: var(--primary-container);
+        }
+
         /* ------------------------- */
         /* 5. УТИЛИТЫ (Тосты, Загрузчик) */
         /* ------------------------- */
@@ -1779,12 +1808,16 @@
                             <div class="bookmark-favicon">
                                 ${faviconEl}
                             </div>
-                            <div style="min-width: 0;">
+                            <div style="min-width: 0; flex-grow: 1;">
                                 <a href="#" class="bookmark-title bookmark-link" data-bookmark-id="${bookmark._id}">
                                     ${bookmark.title}
                                 </a>
                                 <div class="bookmark-url">${bookmark.url}</div>
                             </div>
+                            <!-- Новая кнопка копирования -->
+                            <button class="bookmark-copy-btn" data-copy-id="${bookmark._id}" aria-label="Копировать ссылку">
+                                <span class="material-symbols-outlined">link</span>
+                            </button>
                         </div>
 
                         <p class="bookmark-description">${bookmark.description || '...'}</p>
@@ -1814,6 +1847,15 @@
                     `;
                     els.bookmarksGrid.appendChild(card);
                 });
+            };
+
+            const handleCopyClick = (e) => {
+                const copyBtn = e.target.closest('[data-copy-id]');
+                if (copyBtn) {
+                    e.preventDefault();
+                    const bookmarkId = copyBtn.dataset.copyId;
+                    copyBookmarkLink(bookmarkId, copyBtn);
+                }
             };
 
             const handleGridClick = (e) => {
@@ -1865,6 +1907,40 @@
             const openDeleteModal = (id) => {
                 state.editingBookmarkId = id;
                 openModal(els.deleteConfirmModal);
+            };
+
+            const copyBookmarkLink = async (bookmarkId, button) => {
+                const shortUrl = `${API_URL}/r/${bookmarkId}`;
+
+                try {
+                    await navigator.clipboard.writeText(shortUrl);
+
+                    // Визуальная обратная связь
+                    button.classList.add('copied');
+                    const originalIcon = button.innerHTML;
+                    button.innerHTML = '<span class="material-symbols-outlined">check</span>';
+
+                    showToast('Ссылка скопирована в буфер обмена', 'success');
+
+                    // Возвращаем исходный вид через 2 секунды
+                    setTimeout(() => {
+                        button.classList.remove('copied');
+                        button.innerHTML = originalIcon;
+                    }, 2000);
+
+                } catch (err) {
+                    console.error('Ошибка копирования:', err);
+
+                    // Fallback для старых браузеров
+                    const textArea = document.createElement('textarea');
+                    textArea.value = shortUrl;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+
+                    showToast('Ссылка скопирована', 'success');
+                }
             };
 
             const handleSaveBookmark = async (e) => {
@@ -1977,7 +2053,7 @@
                 els.registerForm.addEventListener('submit', handleRegister);
                 els.showRegisterLink.addEventListener('click', showRegisterView);
                 els.showLoginLink.addEventListener('click', showLoginView);
-
+                els.bookmarksGrid.addEventListener('click', handleCopyClick);
                 // Шапка и профиль
                 els.logoutBtn.addEventListener('click', handleLogout);
                 els.profileAvatarBtn.addEventListener('click', () => {
