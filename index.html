@@ -955,7 +955,6 @@
     <!-- ============================================= -->
     <div id="toast-container"></div>
 
-
     <!-- ============================================= -->
     <!--         ЭКРАН АУТЕНТИФИКАЦИИ (Вход)         -->
     <!-- ============================================= -->
@@ -1008,7 +1007,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- ============================================= -->
     <!--          ОСНОВНОЕ ПРИЛОЖЕНИЕ                -->
@@ -1188,7 +1186,6 @@
         </div>
     </div>
 
-
     <!-- ============================================= -->
     <!--            СКРИПТЫ (JAVASCRIPT)             -->
     <!-- ============================================= -->
@@ -1209,14 +1206,13 @@
                     tag: 'all',
                     search: ''
                 },
-                editingBookmarkId: null, // Для подтверждения удаления
+                editingBookmarkId: null,
             };
 
             // Селекторы DOM
             const $ = document.querySelector.bind(document);
             const $$ = document.querySelectorAll.bind(document);
 
-            // Адаптировано под новые ID форм
             const els = {
                 loader: $('#loader-overlay'),
                 toastContainer: $('#toast-container'),
@@ -1262,7 +1258,7 @@
                 bookmarkUrlInput: $('#bookmark-url'),
                 bookmarkDescriptionInput: $('#bookmark-description'),
                 bookmarkTagsInput: $('#bookmark-tags'),
-                bookmarkPublicInput: $('#bookmark-public'), // <-- НОВЫЙ ЭЛЕМЕНТ
+                bookmarkPublicInput: $('#bookmark-public'),
 
                 // Модальное ... (Профиль)
                 profileModal: $('#profile-modal'),
@@ -1283,16 +1279,10 @@
             //  2. УТИЛИТЫ (API, UI)
             // ------------------------------------
 
-            /**
-             * Показать/Скрыть загрузчик
-             */
             const toggleLoader = (show) => {
                 els.loader.classList.toggle('show', show);
             };
 
-            /**
-             * Показать уведомление (тост)
-             */
             const showToast = (message, type = 'info') => {
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
@@ -1313,9 +1303,6 @@
                 }, 3000);
             };
 
-            /**
-             * Общий обработчик запросов к API
-             */
             const apiFetch = async (endpoint, method = 'GET', body = null) => {
                 toggleLoader(true);
                 const headers = {
@@ -1337,33 +1324,28 @@
                 try {
                     const response = await fetch(`${API_URL}${endpoint}`, options);
 
-                    // Адаптация: Бэкенд на DELETE возвращает {ok: true} со статусом 200
                     if (response.status === 200) {
                         const data = await response.json();
-                        // Если это ответ {ok: true} без 'data', считаем успехом (для DELETE)
                         if (data.ok === true && !data.data) {
                             return true;
                         }
-                        // Если {ok: true} и есть 'data', возвращаем 'data' (для GET)
                         if (data.ok === true && data.data) {
                             return data;
                         }
-                        // Если это не {ok: true} (например, /profile), возвращаем все
                         if (!data.ok) {
                             return data;
                         }
                     }
 
                     if (response.status === 201) {
-                         const data = await response.json(); // Для POST
+                         const data = await response.json();
                          return data;
                     }
 
                     if (response.status === 204) {
-                        return true; // Для No Content
+                        return true;
                     }
 
-                    // Обработка ошибок (не-ОК статусы)
                     const errorData = await response.json();
                     const errorMsg = errorData.error || errorData.message || `Ошибка ${response.status}`;
                     throw new Error(errorMsg);
@@ -1371,15 +1353,12 @@
                 } catch (error) {
                     console.error('Ошибка API:', error);
                     showToast(error.message, 'error');
-                    throw error; // Пробрасываем ошибку для обработки в вызывающей функции
+                    throw error;
                 } finally {
                     toggleLoader(false);
                 }
             };
 
-            /**
-             * Получение инициалов из имени
-             */
             const getInitials = (name) => {
                 if (!name) return '...';
                 const parts = name.split(' ');
@@ -1387,25 +1366,15 @@
                 return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
             };
 
-            /**
-             * Получение Favicon (Клиентский парсер)
-             * @param {string} url - URL сайта
-             * @returns {string} - URL фавикона
-             */
             const getFavicon = (url) => {
                 try {
                     const { hostname } = new URL(url);
-                    // Используем сервис Google для надежного получения иконки
                     return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
                 } catch (e) {
-                    // Возвращаем иконку-заглушку, если URL невалидный
                     return null;
                 }
             };
 
-            /**
-             * Форматирование даты
-             */
             const formatDate = (dateString) => {
                 if (!dateString) return 'N/A';
                 const date = new Date(dateString);
@@ -1437,7 +1406,6 @@
             const showAppView = () => {
                 els.authContainer.classList.add('hide');
                 els.appContainer.classList.remove('hide');
-                // Загружаем данные при переходе в приложение
                 fetchProfile();
                 fetchBookmarks();
             };
@@ -1473,7 +1441,6 @@
             //  5. ЛОГИКА АУТЕНТИФИКАЦИИ
             // ------------------------------------
 
-            // Адаптировано
             const handleLogin = async (e) => {
                 e.preventDefault();
                 const login = els.loginLoginInput.value;
@@ -1485,7 +1452,6 @@
                 }
 
                 try {
-                    // Бэкенд возвращает { message, token, user }
                     const data = await apiFetch('/auth/login', 'POST', { login, password });
                     state.token = data.token;
                     localStorage.setItem('jwt', state.token);
@@ -1496,7 +1462,6 @@
                 }
             };
 
-            // Адаптировано
             const handleRegister = async (e) => {
                 e.preventDefault();
                 const userName = els.registerUsernameInput.value;
@@ -1513,10 +1478,7 @@
                 }
 
                 try {
-                    // Бэкенд регистрирует и сразу возвращает токен
-                    // { message, token, user }
                     const data = await apiFetch('/auth/register', 'POST', { userName, login, password });
-
                     state.token = data.token;
                     localStorage.setItem('jwt', state.token);
                     showAppView();
@@ -1535,10 +1497,8 @@
                 showToast('Вы вышли из системы', 'info');
             };
 
-            // Адаптировано
             const fetchProfile = async () => {
                 try {
-                    // Бэкенд возвращает { user: { id, login, userName } }
                     const data = await apiFetch('/auth/profile', 'GET');
                     state.user = data.user;
                     updateProfileUI();
@@ -1548,7 +1508,6 @@
                 }
             };
 
-            // Адаптировано
             const updateProfileUI = () => {
                 if (!state.user) return;
 
@@ -1556,14 +1515,9 @@
                 const name = state.user.userName;
                 const login = state.user.login;
 
-                // Аватар в шапке
                 els.profileAvatarBtn.textContent = initials;
-
-                // Дропдаун
                 els.dropdownUserName.textContent = name;
                 els.dropdownUserLogin.textContent = login;
-
-                // Модальное окно профиля
                 els.profileDetailsAvatar.textContent = initials;
                 els.profileDetailsName.textContent = name;
                 els.profileDetailsLogin.textContent = login;
@@ -1573,15 +1527,43 @@
             //  6. ЛОГИКА УПРАВЛЕНИЯ ЗАКЛАДКАМИ (CRUD)
             // ------------------------------------
 
-            /**
-             * Загрузка всех закладок
-             */
-            // Адаптировано
+            // НОВАЯ ФУНКЦИЯ: Обработка клика по ссылке закладки
+            const handleBookmarkClick = async (bookmarkId) => {
+                try {
+                    const response = await fetch(`${API_URL}/${bookmarkId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${state.token}`
+                        }
+                    });
+
+                    if (response.redirected) {
+                        // Если бэкенд делает редирект, открываем конечный URL
+                        window.open(response.url, '_blank');
+                        // Обновляем статистику кликов
+                        fetchBookmarks();
+                    } else if (response.status === 403) {
+                        const errorData = await response.json();
+                        showToast(errorData.error, 'error');
+                    } else if (response.status === 404) {
+                        showToast('Закладка не найдена', 'error');
+                    } else {
+                        // Для других случаев пытаемся получить URL из ответа
+                        const data = await response.json();
+                        if (data.url) {
+                            window.open(data.url, '_blank');
+                            fetchBookmarks();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Ошибка при переходе по ссылке:', error);
+                    showToast('Не удалось открыть ссылку', 'error');
+                }
+            };
+
             const fetchBookmarks = async () => {
                 try {
-                    // Бэкенд возвращает { ok: true, data: [...] }
                     const data = await apiFetch('/b', 'GET');
-                    // Сортируем по дате создания (новые вверху)
                     state.bookmarks = data.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                     renderAll();
                 } catch (error) {
@@ -1589,17 +1571,11 @@
                 }
             };
 
-            /**
-             * Рендеринг (полное обновление)
-             */
             const renderAll = () => {
                 updateTagList();
                 renderBookmarks();
             };
 
-            /**
-             * Обновление списка тегов в сайдбаре
-             */
             const updateTagList = () => {
                 state.allTags = {};
                 state.bookmarks.forEach(b => {
@@ -1618,7 +1594,7 @@
                 `;
 
                 Object.entries(state.allTags)
-                    .sort((a, b) => b[1] - a[1]) // Сортируем по популярности
+                    .sort((a, b) => b[1] - a[1])
                     .forEach(([tag, count]) => {
                         const activeClass = state.currentFilter.tag === tag ? 'active' : '';
                         els.tagList.innerHTML += `
@@ -1630,14 +1606,9 @@
                     });
             };
 
-            /**
-             * Рендеринг списка закладок
-             */
-            // Адаптировано
             const renderBookmarks = () => {
                 const { tag, search } = state.currentFilter;
 
-                // Фильтрация (остается на клиенте для мгновенного поиска)
                 const filteredBookmarks = state.bookmarks.filter(b => {
                     const matchesTag = tag === 'all' || (b.tags && b.tags.includes(tag));
                     const searchLower = search.toLowerCase();
@@ -1662,10 +1633,9 @@
                 filteredBookmarks.forEach((bookmark, index) => {
                     const card = document.createElement('div');
                     card.className = 'bookmark-card';
-                    card.dataset.id = bookmark._id; // Используем _id
+                    card.dataset.id = bookmark._id;
                     card.style.animationDelay = `${index * 50}ms`;
 
-                    // Используем КЛИЕНТСКИЙ парсер для Favicon
                     const faviconUrl = getFavicon(bookmark.url);
                     const faviconEl = faviconUrl
                         ? `<img src="${faviconUrl}" alt="Favicon" onerror="this.parentElement.innerHTML = '<span class=\\'material-symbols-outlined\\'>public</span>';">`
@@ -1675,14 +1645,14 @@
                         .map(t => `<span class="tag">${t}</span>`)
                         .join('');
 
+                    // ИЗМЕНЕНИЕ: Заменяем обычную ссылку на кнопку с обработчиком
                     card.innerHTML = `
                         <div class="bookmark-card-header">
                             <div class="bookmark-favicon">
                                 ${faviconEl}
                             </div>
                             <div style="min-width: 0;">
-                                <!-- Ссылка ведет на бэкенд для редиректа и отслеживания клика -->
-                                <a href="${API_URL}/${bookmark._id}" target="_blank" class="bookmark-title">
+                                <a href="#" class="bookmark-title bookmark-link" data-bookmark-id="${bookmark._id}">
                                     ${bookmark.title}
                                 </a>
                                 <div class="bookmark-url">${bookmark.url}</div>
@@ -1695,7 +1665,6 @@
 
                         <div class="bookmark-footer">
                             <div class="bookmark-stats">
-                                <!-- Используем clicksCount и lastClicked из бэкенда -->
                                 <span>
                                     <span class="material-symbols-outlined">ads_click</span>
                                     ${bookmark.clicksCount || 0}
@@ -1719,71 +1688,60 @@
                 });
             };
 
-            /**
-             * Обработка клика по карточке (делегирование)
-             */
-            // Адаптировано
             const handleGridClick = (e) => {
                 const target = e.target.closest('[data-action]');
                 if (!target) return;
 
                 const action = target.dataset.action;
-                const id = target.dataset.id; // Это _id
+                const id = target.dataset.id;
 
                 if (action === 'edit') {
                     openEditModal(id);
                 } else if (action === 'delete') {
                     openDeleteModal(id);
                 }
-                // Логика 'click' удалена, т.к. бэкенд обрабатывает это через <a> href
             };
 
-            /**
-             * Открытие модального окна для добавления
-             */
-            // Адаптировано
+            // НОВЫЙ ОБРАБОТЧИК: Клики по ссылкам закладок
+            const handleBookmarkLinkClick = (e) => {
+                if (e.target.classList.contains('bookmark-link')) {
+                    e.preventDefault();
+                    const bookmarkId = e.target.dataset.bookmarkId;
+                    handleBookmarkClick(bookmarkId);
+                }
+            };
+
             const openAddModal = () => {
                 els.modalTitle.textContent = 'Добавить закладку';
                 els.addEditForm.reset();
                 els.bookmarkIdInput.value = '';
-                els.bookmarkPublicInput.checked = false; // <-- Сброс переключателя
+                els.bookmarkPublicInput.checked = false;
                 openModal(els.addEditModal);
             };
 
-            /**
-             * Открытие модального окна для редактирования
-             */
-            // Адаптировано
             const openEditModal = (id) => {
-                const bookmark = state.bookmarks.find(b => b._id === id); // Используем _id
+                const bookmark = state.bookmarks.find(b => b._id === id);
                 if (!bookmark) return;
 
                 els.modalTitle.textContent = 'Редактировать закладку';
-                els.bookmarkIdInput.value = bookmark._id; // Используем _id
+                els.bookmarkIdInput.value = bookmark._id;
                 els.bookmarkTitleInput.value = bookmark.title;
                 els.bookmarkUrlInput.value = bookmark.url;
                 els.bookmarkDescriptionInput.value = bookmark.description || '';
                 els.bookmarkTagsInput.value = (bookmark.tags || []).join(', ');
-                els.bookmarkPublicInput.checked = bookmark.public || false; // <-- Установка переключателя
+                els.bookmarkPublicInput.checked = bookmark.public || false;
 
                 openModal(els.addEditModal);
             };
 
-            /**
-             * Открытие модального окна для удаления
-             */
             const openDeleteModal = (id) => {
-                state.editingBookmarkId = id; // Это _id
+                state.editingBookmarkId = id;
                 openModal(els.deleteConfirmModal);
             };
 
-            /**
-             * Сохранение (Создание/Обновление)
-             */
-            // Адаптировано
             const handleSaveBookmark = async (e) => {
                 e.preventDefault();
-                const id = els.bookmarkIdInput.value; // Это будет _id при редактировании
+                const id = els.bookmarkIdInput.value;
                 const tags = els.bookmarkTagsInput.value
                     .split(',')
                     .map(tag => tag.trim())
@@ -1794,24 +1752,18 @@
                     url: els.bookmarkUrlInput.value,
                     description: els.bookmarkDescriptionInput.value,
                     tags: tags,
-                    public: els.bookmarkPublicInput.checked // <-- Отправка статуса "public"
-                    // 'icon' не отправляем, бэкенд его не ждет (и парсим клиентом)
+                    public: els.bookmarkPublicInput.checked
                 };
 
                 try {
                     if (id) {
-                        // Обновление (PATCH)
-                        // Бэкенд возвращает { ok: true, data: updatedBookmark }
                         const data = await apiFetch(`/b/${id}`, 'PATCH', payload);
                         const updatedBookmark = data.data;
-                        // Обновляем закладку в state по _id
                         state.bookmarks = state.bookmarks.map(b =>
                             b._id === id ? { ...b, ...updatedBookmark } : b
                         );
                         showToast('Закладка обновлена', 'success');
                     } else {
-                        // Создание (POST)
-                        // Бэкенд возвращает { message, ok, data: newBookmark }
                         const data = await apiFetch('/b', 'POST', payload);
                         const newBookmark = data.data;
                         state.bookmarks.unshift(newBookmark);
@@ -1826,18 +1778,13 @@
                 }
             };
 
-            /**
-             * Подтверждение удаления
-             */
-            // Адаптировано
             const handleDeleteConfirm = async () => {
-                const id = state.editingBookmarkId; // Это _id
+                const id = state.editingBookmarkId;
                 if (!id) return;
 
                 try {
-                    // Бэкенд возвращает { ok: true }
                     await apiFetch(`/b/${id}`, 'DELETE');
-                    state.bookmarks = state.bookmarks.filter(b => b._id !== id); // Используем _id
+                    state.bookmarks = state.bookmarks.filter(b => b._id !== id);
                     state.editingBookmarkId = null;
 
                     closeModal(els.deleteConfirmModal);
@@ -1853,18 +1800,12 @@
             //  7. ФИЛЬТРАЦИЯ И ПРОЧИЕ ФУНКЦИИ
             // ------------------------------------
 
-            /**
-             * Обработка поиска
-             */
             const handleSearch = (e) => {
                 state.currentFilter.search = e.target.value.trim();
                 clearTimeout(state.searchTimeout);
                 state.searchTimeout = setTimeout(renderBookmarks, 300);
             };
 
-            /**
-             * Обработка фильтра по тегу (делегирование)
-             */
             const handleTagFilter = (e) => {
                 const target = e.target.closest('.tag-filter-item');
                 if (!target) return;
@@ -1879,9 +1820,6 @@
                 renderBookmarks();
             };
 
-            /**
-             * Экспорт закладок
-             */
             const handleExport = () => {
                 if (state.bookmarks.length === 0) {
                     showToast('Нет закладок для экспорта', 'info');
@@ -1936,6 +1874,9 @@
                 els.addEditForm.addEventListener('submit', handleSaveBookmark);
                 els.confirmDeleteBtn.addEventListener('click', handleDeleteConfirm);
                 els.bookmarksGrid.addEventListener('click', handleGridClick);
+
+                // НОВЫЙ ОБРАБОТЧИК: Клики по ссылкам закладок
+                els.bookmarksGrid.addEventListener('click', handleBookmarkLinkClick);
 
                 // Фильтры
                 els.searchInput.addEventListener('input', handleSearch);
