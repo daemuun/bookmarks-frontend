@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Менеджер Закладок</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Иконки (Material Symbols) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <!-- Стили (CSS) - Визуальный стиль сохранен -->
     <style>
@@ -64,9 +66,11 @@
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: var(--surface);
         }
+
         ::-webkit-scrollbar-thumb {
             background-color: var(--primary-container);
             border-radius: var(--radius-full);
@@ -106,8 +110,10 @@
             color: white;
             box-shadow: var(--shadow-medium);
         }
+
         .btn-primary:hover {
-            background-color: #8B5CF6; /* Ярче */
+            background-color: #8B5CF6;
+            /* Ярче */
             box-shadow: var(--shadow-large);
             transform: translateY(-2px);
         }
@@ -117,6 +123,7 @@
             color: var(--secondary);
             border: 1px solid var(--primary-container);
         }
+
         .btn-secondary:hover {
             background-color: var(--primary-container);
             color: white;
@@ -126,6 +133,7 @@
             background-color: var(--error);
             color: white;
         }
+
         .btn-danger:hover {
             background-color: #EF4444;
         }
@@ -142,10 +150,12 @@
             justify-content: center;
             transition: background-color var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease);
         }
+
         .icon-btn:hover {
             background-color: var(--surface-container-hover);
             color: var(--on-surface);
         }
+
         .icon-btn .material-symbols-outlined {
             font-size: 24px;
         }
@@ -156,10 +166,12 @@
             gap: 8px;
             margin-bottom: 16px;
         }
+
         .input-group label {
             font-weight: 500;
             color: var(--secondary);
         }
+
         .input-field {
             background-color: var(--surface);
             border: 1px solid var(--outline);
@@ -169,20 +181,24 @@
             font-size: 1rem;
             transition: border-color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease);
         }
+
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
         }
+
         .input-field.is-invalid {
             border-color: var(--error);
         }
+
         .error-message {
             color: var(--error);
             font-size: 0.875rem;
             display: none;
         }
-        .input-field.is-invalid + .error-message {
+
+        .input-field.is-invalid+.error-message {
             display: block;
         }
 
@@ -196,27 +212,35 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 4px; /* Небольшой отступ */
+            padding: 12px 4px;
+            /* Небольшой отступ */
             margin-bottom: 16px;
         }
-        .toggle-switch-group label[for="bookmark-public"] { /* Метка */
+
+        .toggle-switch-group label[for="bookmark-public"] {
+            /* Метка */
             font-weight: 500;
             color: var(--secondary);
             margin-right: 16px;
             cursor: pointer;
         }
+
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 50px; /* Ширина */
-            height: 28px; /* Высота */
+            width: 50px;
+            /* Ширина */
+            height: 28px;
+            /* Высота */
             flex-shrink: 0;
         }
+
         .toggle-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
+
         .toggle-slider {
             position: absolute;
             cursor: pointer;
@@ -228,23 +252,30 @@
             transition: var(--transition-speed) var(--transition-ease);
             border-radius: var(--radius-full);
         }
+
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 20px; /* Кружок */
-            width: 20px; /* Кружок */
+            height: 20px;
+            /* Кружок */
+            width: 20px;
+            /* Кружок */
             left: 4px;
             bottom: 4px;
             background-color: var(--on-surface);
             transition: var(--transition-speed) var(--transition-ease);
             border-radius: 50%;
         }
-        input:checked + .toggle-slider {
+
+        input:checked+.toggle-slider {
             background-color: var(--primary);
         }
-        input:checked + .toggle-slider:before {
-            transform: translateX(22px); /* 50 - 4 - 20 - 4 = 22 */
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(22px);
+            /* 50 - 4 - 20 - 4 = 22 */
         }
+
         /* --- КОНЕЦ НОВОГО СТИЛЯ --- */
 
 
@@ -254,12 +285,14 @@
             flex-grow: 1;
             max-width: 500px;
         }
+
         .search-bar .input-field {
             padding-left: 44px;
             border-radius: var(--radius-full);
             background-color: var(--surface-container);
             border-color: var(--surface-container);
         }
+
         .search-bar .material-symbols-outlined {
             position: absolute;
             left: 12px;
@@ -289,6 +322,7 @@
             gap: 8px;
             text-decoration: none;
         }
+
         .logo .material-symbols-outlined {
             font-size: 28px;
             color: var(--primary);
@@ -336,12 +370,14 @@
             margin-top: 24px;
             font-size: 0.9rem;
         }
+
         .auth-switch a {
             color: var(--secondary);
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
         }
+
         .auth-switch a:hover {
             text-decoration: underline;
         }
@@ -370,6 +406,7 @@
         .profile-menu {
             position: relative;
         }
+
         .profile-avatar {
             width: 40px;
             height: 40px;
@@ -399,16 +436,19 @@
             transform: translateY(10px);
             transition: all var(--transition-speed) var(--transition-ease);
         }
+
         .profile-menu.open .dropdown-menu {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
+
         .dropdown-header {
             padding: 8px 12px;
             border-bottom: 1px solid var(--outline);
             margin-bottom: 8px;
         }
+
         .dropdown-header-name {
             font-weight: 600;
             color: var(--on-surface);
@@ -416,6 +456,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .dropdown-header-email {
             font-size: 0.875rem;
             color: var(--on-surface-variant);
@@ -423,6 +464,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .dropdown-item {
             display: flex;
             align-items: center;
@@ -433,9 +475,11 @@
             color: var(--on-surface);
             transition: background-color var(--transition-speed) var(--transition-ease);
         }
+
         .dropdown-item:hover {
             background-color: var(--surface-container-hover);
         }
+
         .dropdown-item.danger {
             color: var(--error);
         }
@@ -456,8 +500,10 @@
             padding: 20px;
             height: fit-content;
             position: sticky;
-            top: 100px; /* Высота шапки + отступ */
+            top: 100px;
+            /* Высота шапки + отступ */
         }
+
         #sidebar h3 {
             font-size: 1.1rem;
             font-weight: 600;
@@ -466,6 +512,7 @@
             padding-bottom: 8px;
             border-bottom: 1px solid var(--outline);
         }
+
         #tag-list {
             display: flex;
             flex-direction: column;
@@ -473,6 +520,7 @@
             max-height: 300px;
             overflow-y: auto;
         }
+
         .tag-filter-item {
             display: flex;
             justify-content: space-between;
@@ -482,19 +530,23 @@
             cursor: pointer;
             transition: background-color var(--transition-speed) var(--transition-ease);
         }
+
         .tag-filter-item:hover {
             background-color: var(--surface-container-hover);
         }
+
         .tag-filter-item.active {
             background-color: var(--primary-container);
             color: white;
             font-weight: 600;
         }
+
         .tag-name {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .tag-count {
             font-size: 0.875rem;
             background-color: var(--surface);
@@ -502,6 +554,7 @@
             border-radius: var(--radius-small);
             color: var(--on-surface-variant);
         }
+
         .tag-filter-item.active .tag-count {
             background-color: var(--primary);
             color: white;
@@ -509,8 +562,10 @@
 
         /* --- Сетка закладок --- */
         #bookmarks-container {
-            min-width: 0; /* Для корректной работы grid/flex */
+            min-width: 0;
+            /* Для корректной работы grid/flex */
         }
+
         #bookmarks-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -523,15 +578,18 @@
             background-color: var(--surface-container);
             border-radius: var(--radius-large);
         }
+
         #empty-state .material-symbols-outlined {
             font-size: 64px;
             color: var(--primary);
         }
+
         #empty-state h3 {
             font-size: 1.5rem;
             font-weight: 600;
             margin-top: 16px;
         }
+
         #empty-state p {
             color: var(--on-surface-variant);
             margin-top: 8px;
@@ -549,8 +607,10 @@
             gap: 12px;
             transition: all var(--transition-speed) var(--transition-ease);
             animation: scaleIn 0.3s var(--transition-ease) forwards;
-            opacity: 0; /* Для анимации */
+            opacity: 0;
+            /* Для анимации */
         }
+
         .bookmark-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-medium);
@@ -562,6 +622,7 @@
             align-items: center;
             gap: 12px;
         }
+
         .bookmark-favicon {
             width: 40px;
             height: 40px;
@@ -573,11 +634,13 @@
             flex-shrink: 0;
             overflow: hidden;
         }
+
         .bookmark-favicon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .bookmark-favicon .material-symbols-outlined {
             color: var(--secondary);
             font-size: 24px;
@@ -594,6 +657,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .bookmark-title:hover {
             color: var(--secondary);
         }
@@ -604,8 +668,10 @@
             color: var(--on-surface-variant);
             /* white-space: nowrap; - Убрано */
             /* text-overflow: ellipsis; - Убрано */
-            word-break: break-all; /* Добавлено: исправляет баг с длинной ссылкой */
+            word-break: break-all;
+            /* Добавлено: исправляет баг с длинной ссылкой */
         }
+
         /* === КОНЕЦ ИЗМЕНЕНИЯ === */
 
         .bookmark-description {
@@ -639,11 +705,13 @@
             font-size: 0.8rem;
             color: var(--on-surface-variant);
         }
+
         .bookmark-stats span {
             display: inline-flex;
             align-items: center;
             gap: 4px;
         }
+
         .bookmark-stats .material-symbols-outlined {
             font-size: 16px;
         }
@@ -651,6 +719,7 @@
         .bookmark-actions .icon-btn {
             padding: 6px;
         }
+
         .bookmark-actions .icon-btn .material-symbols-outlined {
             font-size: 20px;
         }
@@ -674,10 +743,12 @@
             transition: all var(--transition-speed) var(--transition-ease);
             z-index: 200;
         }
+
         #fab-add-bookmark:hover {
             background-color: #8B5CF6;
             transform: scale(1.05) rotate(15deg);
         }
+
         #fab-add-bookmark .material-symbols-outlined {
             font-size: 28px;
             font-weight: 500;
@@ -718,6 +789,7 @@
             transform: scale(0.95);
             transition: all var(--transition-speed) var(--transition-ease);
         }
+
         .modal-backdrop.show .modal-content {
             transform: scale(1);
         }
@@ -728,6 +800,7 @@
             align-items: center;
             margin-bottom: 24px;
         }
+
         .modal-header h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -747,6 +820,7 @@
         #delete-confirm-modal .modal-content {
             max-width: 400px;
         }
+
         #delete-confirm-message {
             font-size: 1rem;
             color: var(--on-surface-variant);
@@ -757,6 +831,7 @@
             max-width: 450px;
             z-index: 20;
         }
+
         .profile-details {
             display: flex;
             flex-direction: column;
@@ -764,6 +839,7 @@
             gap: 12px;
             margin-bottom: 24px;
         }
+
         .profile-details-avatar {
             width: 80px;
             height: 80px;
@@ -776,14 +852,17 @@
             font-size: 2.5rem;
             font-weight: 600;
         }
+
         #profile-details-name {
             font-size: 1.5rem;
             font-weight: 600;
         }
+
         #profile-details-email {
             font-size: 1rem;
             color: var(--on-surface-variant);
         }
+
         #export-bookmarks-btn {
             width: 100%;
             margin-top: 16px;
@@ -803,6 +882,7 @@
             flex-direction: column;
             gap: 12px;
         }
+
         .toast {
             padding: 12px 20px;
             border-radius: var(--radius-medium);
@@ -815,14 +895,18 @@
             gap: 12px;
             animation: slideInUp 0.3s var(--transition-ease) forwards, fadeOut 0.3s var(--transition-ease) 2.7s forwards;
         }
+
         .toast .material-symbols-outlined {
             font-size: 24px;
         }
+
         .toast.success {
-            background-color: #10B981; /* Green 500 */
+            background-color: #10B981;
+            /* Green 500 */
             color: white;
             border-color: #059669;
         }
+
         .toast.error {
             background-color: var(--error);
             color: white;
@@ -842,10 +926,12 @@
             visibility: hidden;
             transition: all 0.2s var(--transition-ease);
         }
+
         #loader-overlay.show {
             opacity: 1;
             visibility: visible;
         }
+
         .spinner {
             width: 56px;
             height: 56px;
@@ -859,27 +945,55 @@
         /* 6. АНИМАЦИИ             */
         /* ------------------------- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ------------------------- */
@@ -890,17 +1004,20 @@
             #app-main {
                 grid-template-columns: 1fr;
             }
+
             #sidebar {
                 position: static;
                 top: auto;
                 width: 100%;
             }
+
             #tag-list {
                 flex-direction: row;
                 flex-wrap: wrap;
                 max-height: none;
                 overflow-x: auto;
             }
+
             .tag-filter-item {
                 flex-grow: 1;
                 justify-content: center;
@@ -911,38 +1028,45 @@
             body {
                 font-size: 15px;
             }
+
             #app-header {
                 padding: 12px 16px;
                 flex-wrap: wrap;
                 gap: 12px;
             }
+
             .search-bar {
                 order: 3;
                 width: 100%;
                 max-width: none;
             }
+
             #app-main {
                 padding: 16px;
                 gap: 16px;
             }
+
             #bookmarks-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
+
             #fab-add-bookmark {
                 bottom: 20px;
                 right: 20px;
             }
+
             .auth-card {
                 padding: 24px;
             }
+
             .modal-content {
                 padding: 20px;
             }
         }
-
     </style>
 </head>
+
 <body>
 
     <!-- ============================================= -->
@@ -1024,7 +1148,8 @@
 
             <div class="search-bar">
                 <span class="material-symbols-outlined">search</span>
-                <input type="search" id="search-input" class="input-field" placeholder="Поиск по названию, тегам, URL...">
+                <input type="search" id="search-input" class="input-field"
+                    placeholder="Поиск по названию, тегам, URL...">
             </div>
 
             <div class="profile-menu" id="profile-menu-container">
@@ -1340,8 +1465,8 @@
                     }
 
                     if (response.status === 201) {
-                         const data = await response.json();
-                         return data;
+                        const data = await response.json();
+                        return data;
                     }
 
                     if (response.status === 204) {
@@ -1539,23 +1664,24 @@
                         }
                     });
 
-                    if (response.redirected) {
-                        // Если бэкенд делает редирект, открываем конечный URL
-                        window.open(response.url, '_blank');
-                        // Обновляем статистику кликов
-                        fetchBookmarks();
+                    if (response.status === 200) {
+                        const data = await response.json();
+
+                        if (data.redirect && data.url) {
+                            // Открываем URL напрямую в новом окне
+                            window.open(data.url, '_blank');
+                            // Обновляем статистику кликов
+                            setTimeout(() => fetchBookmarks(), 1000);
+                        } else {
+                            showToast('Не удалось получить ссылку', 'error');
+                        }
                     } else if (response.status === 403) {
                         const errorData = await response.json();
                         showToast(errorData.error, 'error');
                     } else if (response.status === 404) {
                         showToast('Закладка не найдена', 'error');
                     } else {
-                        // Для других случаев пытаемся получить URL из ответа
-                        const data = await response.json();
-                        if (data.url) {
-                            window.open(data.url, '_blank');
-                            fetchBookmarks();
-                        }
+                        showToast('Ошибка при переходе по ссылке', 'error');
                     }
                 } catch (error) {
                     console.error('Ошибка при переходе по ссылке:', error);
@@ -1829,7 +1955,7 @@
                 }
 
                 const dataStr = JSON.stringify(state.bookmarks, null, 2);
-                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
 
                 const link = document.createElement('a');
                 link.setAttribute('href', dataUri);
@@ -1902,4 +2028,5 @@
     </script>
 
 </body>
+
 </html>
